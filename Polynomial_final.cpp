@@ -27,31 +27,32 @@ int main(){
 
 	MyPoly poly1("B1.txt");
 	MyPoly poly2("B2.txt");
-	MyPoly poly3;
+
 	MyPoly poly4;
 	MyPoly poly5;
 	poly1.ShowPoly(); 
 	poly2.ShowPoly();
-	polynomial t;
-	t.coef=10;
-	t.expon=10;
-	poly3=poly1.SingleMult(t);
-	poly3.ShowPoly();
-	poly3.Remove(30);
-	poly3.ShowPoly();
+
 	printf("=========\n");
 	poly4 = poly1.Add(poly2);
 	poly4.ShowPoly();
 	printf("=========\n");
 	poly5=poly1.Mult(poly2);
-	poly5.ShowPoly();
 	
+	poly5.ShowPoly();
+	printf("%d\n",poly5.size);
+	printf("%d\n",poly2.Lead_Exp());
 	return 0;
 } 
 
 MyPoly::MyPoly()
 {
 	size=0;
+	int i;
+	for(i=0;i<MAX;i++){
+		terms[i].expon=0;
+		terms[i].coef=0;
+	}
 	//printf("No arg\n");
 }
 
@@ -197,17 +198,25 @@ MyPoly MyPoly::Mult(MyPoly B)
 {
      MyPoly result;
      MyPoly resplus;
-     int a_index=0, b_index=0,res_index=0;
-     
+     int a_index=0, b_index=0,res_index=0,i=0;
+     printf("%d",size);
      while(a_index<size){
-     	while(b_index<B.size){
+     	    while(b_index<B.size){
      		resplus.terms[0].coef=terms[a_index].coef*B.terms[b_index].coef;
      		resplus.terms[0].expon=terms[a_index].expon+B.terms[b_index].expon;
+     		
+     		while(result.terms[i].expon!=0){
+     			i++;
+			 }
+			result.size=i;
      		result=result.Add(resplus);
      		b_index++;
+     		printf("%d",a_index);
 		 }
-     	a_index++;
+		 a_index++;
 	 }
+	
+	 
 	 return result;
 }
 
