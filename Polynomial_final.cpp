@@ -20,15 +20,114 @@ struct MyPoly{
 	void Attach(int, int);          //新增 1 個項式到多項式中
 	void Remove(int);               //刪除多項式中的某一指數
 	MyPoly Mult(MyPoly); 
-  
+  	void read(const char*);
 };
 
 int main(){
-
-	MyPoly poly1("B1.txt");
-	MyPoly poly2("B2.txt");
-	int select;
+	MyPoly poly1;
+	MyPoly poly2;
+	MyPoly tempoly;
+	int select=1,tem;
+	polynomial singleterm;
 	while(select!=0){
+		printf("===========================\n");
+		printf("1. read poly\n2. print poly\n3. poly add\n4. poly mult a term\n5. print the biggest coef in poly\n6. new a term\n7. delete a term in poly\n8. poly mult\noption: ");
+		scanf("%d",&select);
+		switch(select){
+			case 1:
+				poly1.read("B1.txt");
+				poly2.read("B2.txt");
+
+				break;
+			case 2:
+				printf("which poly do you want to print?(1or2)\n");
+				scanf("%d",&tem);
+				if(tem==1){
+					poly1.ShowPoly();
+				}
+				else if(tem==2){
+					poly2.ShowPoly();
+				}
+				break;
+			case 3:
+				poly1.ShowPoly();
+				printf("+\n");
+				poly2.ShowPoly();
+				printf("=\n");
+				tempoly=poly1.Add(poly2);
+				tempoly.ShowPoly();
+				break;
+			case 4:
+				printf("which poly do you want to mult a term?(1or2)\n");
+				scanf("%d",&tem);
+				printf("pls enter the term you want to mult.(coef expon)\n");
+				if(tem==1){
+					
+					scanf("%d %d",&singleterm.coef,&singleterm.expon);
+					tempoly=poly1.SingleMult(singleterm);
+					tempoly.ShowPoly();
+				}
+				else if(tem==2){
+					
+					scanf("%d %d",&singleterm.coef,&singleterm.expon);
+					tempoly=poly2.SingleMult(singleterm);					
+					tempoly.ShowPoly();
+				}				
+				break;
+			case 5:
+				printf("which poly do you want to print the biggest coef in poly?(1or2)\n");
+				scanf("%d",&tem);
+				if(tem==1){
+					printf("the lead exp= %d\n",poly1.Lead_Exp());
+				}
+				else if(tem==2){
+					printf("the lead exp= %d\n",poly2.Lead_Exp());
+				}				
+				break;	
+			case 6:
+				printf("which poly do you want to attach a term?(1or2)\n");
+				scanf("%d",&tem);
+				printf("pls enter the term you want to attach.(coef expon)\n");
+				if(tem==1){
+					
+					scanf("%d %d",&singleterm.coef,&singleterm.expon);
+					poly1.Attach(singleterm.coef,singleterm.expon);
+					poly1.ShowPoly();
+				}
+				else if(tem==2){
+					
+					scanf("%d %d",&singleterm.coef,&singleterm.expon);
+					poly2.Attach(singleterm.coef,singleterm.expon);
+					poly2.ShowPoly();
+				}				
+				
+				break;
+			case 7:
+				printf("which poly do you want to delete a term?(1or2)\n");
+				scanf("%d",&tem);
+				printf("pls enter the term you want to delete.(expon)\n");
+				if(tem==1){
+					
+					scanf("%d",&singleterm.expon);
+					poly1.Remove(singleterm.expon);
+					poly1.ShowPoly();
+				}
+				else if(tem==2){
+					
+					scanf("%d",&singleterm.expon);
+					poly2.Remove(singleterm.expon);
+					poly2.ShowPoly();
+				}				
+				break;
+			case 8:
+				poly1.ShowPoly();
+				printf("*\n");
+				poly2.ShowPoly();
+				printf("=\n");
+				tempoly=poly1.Mult(poly2);
+				tempoly.ShowPoly();
+				break;											
+		}
 		
 	}
 	
@@ -50,6 +149,19 @@ MyPoly::MyPoly()
 }
 
 MyPoly::MyPoly(const char* filename)
+{
+	FILE *fptr=NULL;
+	fptr=fopen(filename, "r");
+	size=0;
+	while(!feof(fptr)) 
+	{
+		fscanf(fptr,"%d %d", &terms[size].coef, &terms[size].expon);
+		size++;
+	}
+	fclose(fptr);
+	
+}
+void MyPoly::read(const char* filename)
 {
 	FILE *fptr=NULL;
 	fptr=fopen(filename, "r");
